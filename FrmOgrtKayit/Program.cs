@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace OkulApp
+namespace FrmOgrtKayit
 {
     internal static class Program
     {
@@ -16,7 +16,7 @@ namespace OkulApp
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FrmOgrtKayit());
+            Application.Run(new Form1());
         }
     }
 }
