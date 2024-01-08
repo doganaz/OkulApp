@@ -33,6 +33,8 @@ namespace OkulApp
                 frm.txtSoyad.Text = ogr.Soyad;
                 frm.txtNumara.Text = ogr.Numara;
                 frm.OgrenciId = ogr.OgrenciId;
+                frm.Enabled = true;
+                this.Close();
                 
             }
             else

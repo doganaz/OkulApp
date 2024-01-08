@@ -70,16 +70,27 @@ namespace OkulApp.BLL
             ////        cmd.Dispose();
             ////    }
             //}
-
-            SqlParameter[] p =
+            try
+            {
+                SqlParameter[] p =
                     {
                     new SqlParameter("@Ad",ogr.Ad),
                     new SqlParameter("@Soyad",ogr.Soyad),
                     new SqlParameter("@Numara",ogr.Numara)
-            };
-            Helper hlp = new Helper();
-            return hlp.ExecuteNonQuery("Insert Into tblOgrenciler Values(@Ad,@Soyad,@Numara)", p) > 0;
+                };
+                Helper hlp = new Helper();
+                return hlp.ExecuteNonQuery("Insert Into tblOgrenciler Values(@Ad,@Soyad,@Numara)", p) > 0;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            finally
+            {
+            }
         }
+            
+   
         public bool OgrenciIdSil(Ogrenci ogr)
         {
             SqlParameter[] p =
@@ -91,38 +102,62 @@ namespace OkulApp.BLL
         }
         public Ogrenci OgrenciBul(string numara)
         {
-            var hlp = new Helper();
-            SqlParameter[] p = { new SqlParameter("@Numara", numara) };
-            var dr = hlp.ExecuteReader("Select OgrenciId,Ad,Soyad,Numara from tblOgrenciler Where Numara=@Numara", p);
-            Ogrenci ogr = null;
-            if (dr.Read())
+            try
             {
-                ogr = new Ogrenci();
-                ogr.Ad = dr["Ad"].ToString();
-                ogr.Soyad = dr["Soyad"].ToString();
-                ogr.Numara = dr["Numara"].ToString();
-                ogr.OgrenciId = Convert.ToInt32(dr["OgrenciId"]);
-                
+                var hlp = new Helper();
+                SqlParameter[] p = { new SqlParameter("@Numara", numara) };
+                var dr = hlp.ExecuteReader("Select OgrenciId,Ad,Soyad,Numara from tblOgrenciler Where Numara=@Numara", p);
+                Ogrenci ogr = null;
+                if (dr.Read())
+                {
+                    ogr = new Ogrenci();
+                    ogr.Ad = dr["Ad"].ToString();
+                    ogr.Soyad = dr["Soyad"].ToString();
+                    ogr.Numara = dr["Numara"].ToString();
+                    ogr.OgrenciId = Convert.ToInt32(dr["OgrenciId"]);
+
+                }
+                dr.Close();
+                return ogr;
             }
-            dr.Close();
-            return ogr;
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
         public bool OgrenciSil(int id)
         {
-            SqlParameter[] p = { new SqlParameter("@Id", id) };
-            Helper hlp = new Helper();
-            return hlp.ExecuteNonQuery("Delete from tblOgrenciler Where OgrenciId=@Id", p)>0;
+            try
+            {
+                SqlParameter[] p = { new SqlParameter("@Id", id) };
+                Helper hlp = new Helper();
+                return hlp.ExecuteNonQuery("Delete from tblOgrenciler where OgrenciId=@Id", p) > 0;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
 
         }
         public bool OgrenciGuncelle(Ogrenci ogr)
         {
-            SqlParameter[] p = { new SqlParameter("@Ad",ogr.Ad),
+            try
+            {
+                SqlParameter[] p = { new SqlParameter("@Ad",ogr.Ad),
             new SqlParameter("@Soyad",ogr.Soyad),
             new SqlParameter("@Numara",ogr.Numara),
             new SqlParameter("@OgrenciId",ogr.OgrenciId)};
 
-            Helper hlp = new Helper();
-            return hlp.ExecuteNonQuery("Update tblOgrenciler set Ad=@Ad,Soyad=@Soyad,Numara=@Numara where OgrenciId=@OgrenciId", p) > 0;
+                Helper hlp = new Helper();
+                return hlp.ExecuteNonQuery("Update tblOgrenciler set Ad=@Ad,Soyad=@Soyad,Numara=@Numara where OgrenciId=@OgrenciId", p) > 0;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
     }
 }
@@ -131,5 +166,5 @@ namespace OkulApp.BLL
 //textboxların textleri temizlenmesi
 //öğrenci bulunduğunda bul formunun kapnması
 //try catchler katmanlar arası exception yönetimi
-//Dispose Pattern - IDisposeble Interface
-//Singleton Design Pattern
+//Dispose Pattern - IDisposeble Interface araştır
+//Singleton Design Pattern araştır

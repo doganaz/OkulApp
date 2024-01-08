@@ -94,16 +94,25 @@ namespace OkulApp
                 var obl = new OgrenciBL();
                 bool sonuc=obl.OgrenciEkle(new Ogrenci { Ad = txtAd.Text.Trim(), Soyad = txtSoyad.Text.Trim(), Numara = txtNumara.Text.Trim() });
                 MessageBox.Show(sonuc ? "Öğrenci ekleme başarılı" : "Ekleme başarısız");
+                txtAd.Text = "";
+                txtSoyad.Text = "";
+                txtNumara.Text = "";
             }
             catch (SqlException ex)
             {
                 switch (ex.Number)
                 {
                     case 2627:
-                        MessageBox.Show("bu numaralı öğrenci zaten var");
+                        MessageBox.Show("Bu numaralı öğrenci zaten var");
+                        //txtAd.Text = "";
+                        //txtSoyad.Text = "";
+                        txtNumara.Text = "";
                         break;
                     default:
                         MessageBox.Show("veritabanı hatası");
+                        txtAd.Text = "";
+                        txtSoyad.Text = "";
+                        txtNumara.Text = "";
                         break;
                 }
             }
@@ -153,20 +162,66 @@ namespace OkulApp
 
         private void btnBul_Click(object sender, EventArgs e)
         {
-            var frm = new frmOgrBul(this);
-            frm.Show();
+            try
+            {
+                var frm = new frmOgrBul(this);
+                frm.Show();
+                this.Enabled = false;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
 
         private void btnSil_Click(object sender, EventArgs e)
         {
-            var obl = new OgrenciBL();
-            obl.OgrenciSil(OgrenciId);
-            MessageBox.Show(obl.OgrenciSil(OgrenciId) ? "Silme başarısız" : "Silme başarılı");
+            try
+            {
+                var obl = new OgrenciBL();
+                if (obl.OgrenciSil(OgrenciId))
+                {
+                    MessageBox.Show("Silme Başarılı");
+                    txtAd.Text = "";
+                    txtSoyad.Text = "";
+                    txtNumara.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("Silme Başarısız");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
         private void btnGuncelle_Click(object sender, EventArgs e)
         {
-            var obl = new OgrenciBL();
-            MessageBox.Show(obl.OgrenciGuncelle(new Ogrenci { Ad = txtAd.Text.Trim(), Soyad = txtSoyad.Text.Trim(), Numara = txtNumara.Text.Trim(), OgrenciId = OgrenciId }) ? "Güncelleme Başarılı" : "Güncelleme Başarısız!");
+            try
+            {
+                var obl = new OgrenciBL();
+                bool sonuc = obl.OgrenciGuncelle(new Ogrenci { Ad = txtAd.Text.Trim(), Soyad = txtSoyad.Text.Trim(), Numara = txtNumara.Text.Trim(), OgrenciId = OgrenciId });
+                //MessageBox.Show(obl.OgrenciGuncelle(new Ogrenci { Ad = txtAd.Text.Trim(), Soyad = txtSoyad.Text.Trim(), Numara = txtNumara.Text.Trim(), OgrenciId = OgrenciId }) ? "Güncelleme Başarılı" : "Güncelleme Başarısız!");
+                if (sonuc)
+                {
+                    MessageBox.Show("Güncelleme Başarılı!");
+                    txtAd.Text = "";
+                    txtSoyad.Text = "";
+                    txtNumara.Text = "";
+                }
+                else
+                {
+                    MessageBox.Show("Güncelleme Başarısız!");
+                }
+            }
+            catch(Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+            
         }
     }
 
