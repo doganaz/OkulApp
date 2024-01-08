@@ -8,7 +8,5 @@ namespace OkulApp1.MODEL
         public string Ad { get; set; }
         public string Soyad { get; set; }
         public string Numara { get; set; }
-
-
     }
 }

@@ -15,6 +15,7 @@ namespace OkulApp
 {
     public partial class FrmOgrKayit : Form
     {
+        public int OgrenciId { get; set; }
         public FrmOgrKayit()
         {
             InitializeComponent();
@@ -110,6 +111,62 @@ namespace OkulApp
             {
                 MessageBox.Show("bir hata oluştu");
             }
+        }
+
+        private void btnIdSil_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (int.TryParse(txtId.Text.Trim(), out int OgrenciId))
+                {
+                    DialogResult result1 = MessageBox.Show("Silme işlemine emin misiniz?", "Silme İşlemi", MessageBoxButtons.YesNo);
+                    if (result1 == DialogResult.Yes)
+                    {
+                        var obl = new OgrenciBL();
+                        bool sonuc = obl.OgrenciIdSil(new Ogrenci { OgrenciId = OgrenciId });
+                        MessageBox.Show(sonuc ? "Öğrenci silme başarılı" : "Silme başarısız");
+                    }
+                    else
+                    {
+                        this.Close();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Geçersiz ID formatı! Lütfen bir tamsayı girin.", "Hata", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            catch (SqlException ex)
+            {
+                switch (ex.Number)
+                {
+                    default:
+                        MessageBox.Show("Veritabanı hatası");
+                        throw;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Bir hata oluştu");
+            }
+        }
+
+        private void btnBul_Click(object sender, EventArgs e)
+        {
+            var frm = new frmOgrBul(this);
+            frm.Show();
+        }
+
+        private void btnSil_Click(object sender, EventArgs e)
+        {
+            var obl = new OgrenciBL();
+            obl.OgrenciSil(OgrenciId);
+            MessageBox.Show(obl.OgrenciSil(OgrenciId) ? "Silme başarısız" : "Silme başarılı");
+        }
+        private void btnGuncelle_Click(object sender, EventArgs e)
+        {
+            var obl = new OgrenciBL();
+            MessageBox.Show(obl.OgrenciGuncelle(new Ogrenci { Ad = txtAd.Text.Trim(), Soyad = txtSoyad.Text.Trim(), Numara = txtNumara.Text.Trim(), OgrenciId = OgrenciId }) ? "Güncelleme Başarılı" : "Güncelleme Başarısız!");
         }
     }
 
