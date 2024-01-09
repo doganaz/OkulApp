@@ -5,11 +5,13 @@ using System.Data;
 
 namespace DAL
 {
-    public class Helper
+    public class Helper:IDisposable
     {
         SqlConnection cn;
         SqlCommand cmd;
         string cstr = ConfigurationManager.ConnectionStrings["cstr"].ConnectionString;
+        private bool disposedValue;
+
         public int ExecuteNonQuery(string cmdtext, SqlParameter[] p=null)
         {
             using (cn=new SqlConnection(cstr))
@@ -49,6 +51,29 @@ namespace DAL
             }
 
 
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    cmd.Dispose();
+                    cn.Dispose();
+                }
+                disposedValue = true;
+            }
+        }
+        ~Helper()
+        {
+            Dispose(disposing: false);
+        }
+
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
